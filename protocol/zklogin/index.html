@@ -1,0 +1,1825 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://docs.iden3.io/protocol/zklogin/">
+      
+      <link rel="icon" href="../../favicon.ico">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.5.10">
+    
+    
+      
+        <title>Login protocol - Iden3 Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.975780f9.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.2505c338.min.css">
+        
+          
+          
+          <meta name="theme-color" content="#000000">
+        
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#server-side-login-zkp-login" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Iden3 Documentation" class="md-header__button md-logo" aria-label="Iden3 Documentation" data-md-component="logo">
+      
+  <img src="../../logo.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Iden3 Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Login protocol
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/iden3/docs" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../basics/introduction/" class="md-tabs__link">
+        The basics
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../spec/" class="md-tabs__link">
+        Iden3 protocol
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../getting-started/getting-started/" class="md-tabs__link">
+        Core Tutorial
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="./" class="md-tabs__link md-tabs__link--active">
+        Services and protocols
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../main-circuits/" class="md-tabs__link">
+        Circuits
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../circom-snarkjs/" class="md-tabs__link">
+      Circom / snarkjs
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../contracts/state/" class="md-tabs__link">
+        Contracts
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../publications/publications/" class="md-tabs__link">
+      Publications
+    </a>
+  </li>
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Iden3 Documentation" class="md-nav__button md-logo" aria-label="Iden3 Documentation" data-md-component="logo">
+      
+  <img src="../../logo.svg" alt="logo">
+
+    </a>
+    Iden3 Documentation
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/iden3/docs" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1" type="checkbox" id="__nav_1" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_1">
+          The basics
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="The basics" data-md-level="1">
+        <label class="md-nav__title" for="__nav_1">
+          <span class="md-nav__icon md-icon"></span>
+          The basics
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../basics/introduction/" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../basics/key-concepts/" class="md-nav__link">
+        Key concepts
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../basics/getting-started/" class="md-nav__link">
+        Getting started
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          Iden3 protocol
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Iden3 protocol" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Iden3 protocol
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../spec/" class="md-nav__link">
+        Iden3 protocol specs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2_2" type="checkbox" id="__nav_2_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_2">
+          Claim
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Claim" data-md-level="2">
+        <label class="md-nav__title" for="__nav_2_2">
+          <span class="md-nav__icon md-icon"></span>
+          Claim
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../claims-structure/" class="md-nav__link">
+        Structure
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bjjkey/" class="md-nav__link">
+        AuthBJJCredential
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../claim-schema/" class="md-nav__link">
+        Claim Schema
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          Core Tutorial
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Core Tutorial" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Core Tutorial
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/getting-started/" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_2" type="checkbox" id="__nav_3_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_2">
+          Core Components
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Core Components" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_2">
+          <span class="md-nav__icon md-icon"></span>
+          Core Components
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/babyjubjub/" class="md-nav__link">
+        Baby Jubjub Keypair
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/mt/" class="md-nav__link">
+        Sparse Merkle Tree
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_2_3" type="checkbox" id="__nav_3_2_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_2_3">
+          Claim
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Claim" data-md-level="3">
+        <label class="md-nav__title" for="__nav_3_2_3">
+          <span class="md-nav__icon md-icon"></span>
+          Claim
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/claim/generic-claim/" class="md-nav__link">
+        Generic Claim
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/claim/auth-claim/" class="md-nav__link">
+        Auth Claim
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/claim/claim-schema/" class="md-nav__link">
+        Claim Schema
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_2_4" type="checkbox" id="__nav_3_2_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_2_4">
+          Identity
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Identity" data-md-level="3">
+        <label class="md-nav__title" for="__nav_3_2_4">
+          <span class="md-nav__icon md-icon"></span>
+          Identity
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/identity/identity-structure/" class="md-nav__link">
+        Identity Structure
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/identity/identity-state/" class="md-nav__link">
+        Identity State
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/identity/identifier/" class="md-nav__link">
+        Identifier
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_3" type="checkbox" id="__nav_3_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_3">
+          Issue Claim
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Issue Claim" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_3">
+          <span class="md-nav__icon md-icon"></span>
+          Issue Claim
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/issue-claim-overview/" class="md-nav__link">
+        Overview
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/signature-claim/signature/" class="md-nav__link">
+        via Signature
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_3_3" type="checkbox" id="__nav_3_3_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_3_3">
+          via Merkle Tree
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="via Merkle Tree" data-md-level="3">
+        <label class="md-nav__title" for="__nav_3_3_3">
+          <span class="md-nav__icon md-icon"></span>
+          via Merkle Tree
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/state-transition/state-transition/" class="md-nav__link">
+        Intro to State Transition
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/state-transition/new-identity-state/" class="md-nav__link">
+        Add Claim to the Claims Tree
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/state-transition/state-transition-proof/" class="md-nav__link">
+        Generate Proof for State Transition
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/state-transition/on-chain-state-transition/" class="md-nav__link">
+        Verify the Proof On-Chain
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          Services and protocols
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Services and protocols" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Services and protocols
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Login protocol
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Login protocol
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    Introduction
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#login-workflow" class="md-nav__link">
+    Login Workflow
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#authentication-based-on-zero-knowledge-proof" class="md-nav__link">
+    Authentication based on Zero-knowledge Proof
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    Prerequisites
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#integration" class="md-nav__link">
+    Integration
+  </a>
+  
+    <nav class="md-nav" aria-label="Integration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#back-end" class="md-nav__link">
+    Back-end
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#front-end" class="md-nav__link">
+    Front-end
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tutorial-a-simple-go-application" class="md-nav__link">
+    Tutorial: A Simple Go Application
+  </a>
+  
+    <nav class="md-nav" aria-label="Tutorial: A Simple Go Application">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#auth-package" class="md-nav__link">
+    Auth Package
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sign-in" class="md-nav__link">
+    Sign-in
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#callback" class="md-nav__link">
+    Callback
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#verification-procedure" class="md-nav__link">
+    Verification Procedure
+  </a>
+  
+    <nav class="md-nav" aria-label="Verification Procedure">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#zero-knowledge-proof-verification" class="md-nav__link">
+    Zero-knowledge Proof Verification
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#extraction-of-metadata" class="md-nav__link">
+    Extraction of Metadata
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#verification-of-user-identity-states" class="md-nav__link">
+    Verification of User Identity States
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#verification-of-circuits-public-signals" class="md-nav__link">
+    Verification of Circuit's Public Signals
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../querylanguage/" class="md-nav__link">
+        Proof Query language
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5">
+          Circuits
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Circuits" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Circuits
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../main-circuits/" class="md-nav__link">
+        Main Circuits
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../template-circuits/" class="md-nav__link">
+        Template Circuits
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../circom-snarkjs/" class="md-nav__link">
+        Circom / snarkjs
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7" type="checkbox" id="__nav_7" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7">
+          Contracts
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Contracts" data-md-level="1">
+        <label class="md-nav__title" for="__nav_7">
+          <span class="md-nav__icon md-icon"></span>
+          Contracts
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contracts/state/" class="md-nav__link">
+        State Contract
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../publications/publications/" class="md-nav__link">
+        Publications
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    Introduction
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#login-workflow" class="md-nav__link">
+    Login Workflow
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#authentication-based-on-zero-knowledge-proof" class="md-nav__link">
+    Authentication based on Zero-knowledge Proof
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    Prerequisites
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#integration" class="md-nav__link">
+    Integration
+  </a>
+  
+    <nav class="md-nav" aria-label="Integration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#back-end" class="md-nav__link">
+    Back-end
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#front-end" class="md-nav__link">
+    Front-end
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tutorial-a-simple-go-application" class="md-nav__link">
+    Tutorial: A Simple Go Application
+  </a>
+  
+    <nav class="md-nav" aria-label="Tutorial: A Simple Go Application">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#auth-package" class="md-nav__link">
+    Auth Package
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sign-in" class="md-nav__link">
+    Sign-in
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#callback" class="md-nav__link">
+    Callback
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#verification-procedure" class="md-nav__link">
+    Verification Procedure
+  </a>
+  
+    <nav class="md-nav" aria-label="Verification Procedure">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#zero-knowledge-proof-verification" class="md-nav__link">
+    Zero-knowledge Proof Verification
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#extraction-of-metadata" class="md-nav__link">
+    Extraction of Metadata
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#verification-of-user-identity-states" class="md-nav__link">
+    Verification of User Identity States
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#verification-of-circuits-public-signals" class="md-nav__link">
+    Verification of Circuit's Public Signals
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  <a href="https://github.com/iden3/docs/edit/master/docs/protocol/zklogin.md" title="Edit this page" class="md-content__button md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+  </a>
+
+
+<h1 id="server-side-login-zkp-login">Server-side Login (ZKP Login)</h1>
+<h2 id="introduction">Introduction</h2>
+<p>Iden3 is a Self-Sovereign Identity (SSI) solution that allows users to leverage their pre-existing validated identities. With SSI, they are able to prove they are who they claim to be based on the zero-knowledge proofs. One of the direct applications of the iden3 technology is to allow web applications to reuse these identities for logging into their portals.</p>
+<h2 id="login-workflow">Login Workflow</h2>
+<p><a href="https://github.com/iden3/docs/blob/master/mkdocs/docs/imgs/login.png">Login Workflow</a></p>
+<p>In a simple example, an application requests a user identifier; this is done through the zero-knowledge proof (zk proof) generation. The server generates an authentication request.</p>
+<p><em>Auth request</em></p>
+<pre><code class="language-json">    {
+      &quot;type&quot;: &quot;https://iden3-communication.io/authorization-request/v1&quot;,
+      &quot;data&quot;: {
+        &quot;callbackUrl&quot;: &quot;https://test.com/callbackurl&quot;,
+        &quot;audience&quot;: &quot;1125GJqgw6YEsKFwj63GY87MMxPL9kwDKxPUiwMLNZ&quot;,
+        &quot;scope&quot;: [
+            {
+              &quot;circuit_id&quot;: &quot;auth&quot;,
+              &quot;type&quot;: &quot;zeroknowledge&quot;,
+              &quot;rules&quot;: {
+                  &quot;challenge&quot;: 12345
+              }
+          }
+       ]
+      }
+    }
+</code></pre>
+<p>Shown above is an example of an authorization request. Scope field is a set of objects that describes an array of proofs that must be generated on a user device and presented later.
+Each scope member has a unique definition of a circuit that must be used and a set of rules (public inputs) that must be applied.</p>
+<p>This message can be delivered to a user through different communication channels: QR code, email, deep-linking, etc.
+On scanning, mobile needs to implement the following:</p>
+<ol>
+<li>Parse the authorization request and understand which proof handler it should use.</li>
+<li>Resolve the verifier identifier if required.</li>
+<li>Generate proofs using a specific handler. It can be a signature proof or a zero-knowledge proof.</li>
+<li>Prepare an authentication response message.</li>
+</ol>
+<p>On mobile, a user generates the ZK proof using <a href="https://github.com/iden3/circuits/blob/master/circuits/lib/authentication.circom">auth</a> circuit that will prove identity ownership, and send the response to the callback URL.</p>
+<p><em>Auth response</em></p>
+<pre><code class="language-json">{
+  &quot;type&quot;: &quot;https://iden3-communication.io/authorization-response/v1&quot;,
+  &quot;data&quot;: {
+    &quot;scope&quot;: [
+      {
+        &quot;type&quot;: &quot;zeroknowledge&quot;,
+        &quot;circuit_id&quot;: &quot;auth&quot;,
+        &quot;pub_signals&quot;: [
+          &quot;371135506535866236563870411357090963344408827476607986362864968105378316288&quot;,
+          &quot;12345&quot;,
+          &quot;16751774198505232045539489584666775489135471631443877047826295522719290880931&quot;
+        ],
+        &quot;proof_data&quot;: {
+          &quot;pi_a&quot;: [
+            &quot;8286889681087188684411199510889276918687181609540093440568310458198317956303&quot;,
+            &quot;20120810686068956496055592376395897424117861934161580256832624025185006492545&quot;,
+            &quot;1&quot;
+          ],
+          &quot;pi_b&quot;: [
+            [
+              &quot;8781021494687726640921078755116610543888920881180197598360798979078295904948&quot;,
+              &quot;19202155147447713148677957576892776380573753514701598304555554559013661311518&quot;
+            ],
+            [
+              &quot;15726655173394887666308034684678118482468533753607200826879522418086507576197&quot;,
+              &quot;16663572050292231627606042532825469225281493999513959929720171494729819874292&quot;
+            ],
+            [
+              &quot;1&quot;,
+              &quot;0&quot;
+            ]
+          ],
+          &quot;pi_c&quot;: [
+            &quot;9723779257940517259310236863517792034982122114581325631102251752415874164616&quot;,
+            &quot;3242951480985471018890459433562773969741463856458716743271162635077379852479&quot;,
+            &quot;1&quot;
+          ],
+          &quot;protocol&quot;: &quot;groth16&quot;
+        }
+      }
+    ]
+  }
+}
+</code></pre>
+<p>The client, after receiving an authorization response, performs the verification process:</p>
+<ol>
+<li>Verification with zero-knowledge proof.</li>
+<li>Extraction of metadata (auth and circuit-specific).</li>
+<li>Verification of the user identity states.</li>
+<li>Verification of the circuit's public inputs (e.g. issuer state).</li>
+</ol>
+<h2 id="authentication-based-on-zero-knowledge-proof">Authentication based on Zero-knowledge Proof</h2>
+<p>ZK proof is based on the <a href="https://docs.circom.io/">Circom 2.0</a> language.</p>
+<p>Auth Circuit Repository: <a href="https://github.com/iden3/circuits/blob/master/circuits/lib/authentication.circom">auth</a></p>
+<p>The circuit verifies that the user is the owner of the identity and his auth key is not revoked in the provided user state.</p>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>The identity wallet should be installed.</p>
+<h2 id="integration">Integration</h2>
+<h3 id="back-end">Back-end</h3>
+<p><strong>Generate Auth Request</strong></p>
+<pre><code class="language-go">request := auth.CreateAuthorizationRequest(&quot;&lt;challenge&gt;&quot;,&quot;&lt;verifier identity|app-url&gt;&quot;, &quot;&lt;callbackURI&gt;&quot;) // create auth request
+</code></pre>
+<p><strong>Validate Auth Request</strong></p>
+<pre><code class="language-go">// unpack raw message
+message, err := packer.Unpack(msgBytes) 
+// call library to verify zkp proofs
+err = auth.VerifyProofs(message)  
+// extract metadata
+token, err := auth.ExtractMetadata(message)
+// verify state
+stateInfo, err := token.VerifyState(ctx.Background(),&quot;&lt; rpc url &gt;&quot;, &quot;&lt; state contract address &gt;&quot;)
+
+</code></pre>
+<p>In future releases of the auth library, the verification procedure will be simplified and optimized for a verifier.</p>
+<h3 id="front-end">Front-end</h3>
+<p>On the front-end, you need to embed a button to initiate the login process. After this button is pressed, the front-end makes a request to the back-end to generate an authentication request and displays it in the QR code. When a user scans the QR code, the phone generates a zk proof and sends this proof to the call-back URL from the QR code.
+Currently, we are working on the js-iden3-auth library.</p>
+<h2 id="tutorial-a-simple-go-application">Tutorial: A Simple Go Application</h2>
+<p>For this, we need a web server with two endpoints:</p>
+<ul>
+<li>GET /sign-in should return auth request</li>
+<li>POST /call-back endpoint to receive a callback request from the phone and validate the same</li>
+</ul>
+<p>Let us write a simple web server:</p>
+<pre><code class="language-go">func main() {
+
+    http.HandleFunc(&quot;/sign-in&quot;, signIn)
+    http.HandleFunc(&quot;/call-back&quot;, callBack)
+
+    http.ListenAndServe(&quot;:8001&quot;, nil)
+}
+
+func signIn(w http.ResponseWriter, req *http.Request) {
+
+}
+
+func callBack(w http.ResponseWriter, req *http.Request) {
+
+}
+</code></pre>
+<h3 id="auth-package">Auth Package</h3>
+<p>Add the authorization package to the project.</p>
+<pre><code class="language-go">go get https://github.com/iden3/go-iden3-auth
+</code></pre>
+<h3 id="sign-in">Sign-in</h3>
+<p>To generate a zk auth request, we need a callback URL where we will receive a response from the mobile application along with an authentication response and the verifier's identity. <!--[Do we really need this identity?]--></p>
+<p>The go-iden3-auth library contains a method for generating the authentication request.</p>
+<p>[Description]</p>
+<pre><code class="language-go">func CreateAuthorizationRequest(challenge int64, aud, callbackURL string) *types.AuthorizationMessageRequest
+</code></pre>
+<p>Now, we are ready to generate the auth request:</p>
+<pre><code class="language-go">const CallBackUrl      = &quot;http:localhost:8001/call-back&quot;
+const VerifierIdentity = &quot;1125GJqgw6YEsKFwj63GY87MMxPL9kwDKxPUiwMLNZ&quot;
+
+func signIn(w http.ResponseWriter, req *http.Request) {
+
+    request := auth.CreateAuthorizationRequest(10, VerifierIdentity, callBackURI)
+
+    msgBytes, _ := json.Marshal(request) // error handling ommited for simplification
+
+    w.Header().Set(&quot;Content-Type&quot;, &quot;application/json&quot;)
+    w.WriteHeader(http.StatusOK)
+    w.Write(msgBytes)
+}
+</code></pre>
+<h3 id="callback">Callback</h3>
+<p>When we receive a callback request with a zk response, to validate, we need to take the following actions:</p>
+<ol>
+<li>Validate zk proof and make sure that the proof is valid.</li>
+<li>Validate identity's state on-chain so as to verify that the user identity state is valid and his/her auth keys are not revoked.</li>
+</ol>
+<p>First, let’s validate the zk proof. For this, we have the following function:</p>
+<pre><code class="language-go">func VerifyProofs(message types.Message) (err error)
+</code></pre>
+<p>But before we can call it, we need to unpack raw bytes to a message. Packer can be used to process the encrypted message for future releases.</p>
+<pre><code class="language-go">p := &amp;packer.PlainMessagePacker{}
+// Unpack msg
+message, _ := p.Unpack(msgBytes)    
+// verify zkp
+proofErr := auth.VerifyProofs(message)
+</code></pre>
+<p>Now that the zk proof is verified, we can check the identity's status on-chain.</p>
+<p>First, we need access the RPC URL and the address of the identity's smart contract:</p>
+<pre><code class="language-go">const rpc = &quot;https://polygon-mumbai.infura.io/v3/&lt;your-token&gt;&quot;
+const IdentityContract = &quot;0x3e95a7B12e8905E01126E1beA3F1a52D1624A725&quot;
+</code></pre>
+<p>Before we can verify a state, we need to extract the metadata and then verify it on-chain.</p>
+<pre><code class="language-go">token, _:= auth.ExtractMetadata(message)
+
+// verify match identifier with the state on chain
+stateInfo, err := token.VerifyState(ctx, rpc, IdentityContract)
+</code></pre>
+<h2 id="verification-procedure">Verification Procedure</h2>
+<h3 id="zero-knowledge-proof-verification">Zero-knowledge Proof Verification</h3>
+<blockquote>
+<p>Groth16 proofs are now supported by the auth library.</p>
+</blockquote>
+<p>Verification keys for the circuits can be referred to from the library. In the future, they can be resolved from the circuit registries.</p>
+<h3 id="extraction-of-metadata">Extraction of Metadata</h3>
+<p>Each circuit has a schema of its public inputs that links the public signal name to its position in the resulting array. This allows extracting user identifiers and challenges from the proof for authentication.</p>
+<p>Other signals are added to the user token (scope field) as attributes of a specific circuit. The circuit's public signal schemas are known by this library or can be retrieved from a registry.</p>
+<h3 id="verification-of-user-identity-states">Verification of User Identity States</h3>
+<p>The blockchain verification algorithm is used to:</p>
+<ol>
+<li>
+<p>Get state from the blockchain (address of the id state contract and URL must be provided by the caller of the library):</p>
+<ol>
+<li><strong>Empty State is Returned</strong>: It indicates that the identity state has not been updated or the updated state has not been published. We need to compare the id with the state. If they are different, it is not the genesis state of the identity and it is not valid.</li>
+<li><strong>Non-empty State is Returned and Equals to the State Provided in Proof</strong>: This indicates that the user state is new and we work with the latest user state.</li>
+<li><strong>Non-empty State is Returned and is not Equal to the State Provided in Proof</strong>: Gets the time of the state transition. The verification party can make a decision if it can accept this state based on that time frame.</li>
+</ol>
+</li>
+<li>
+<p>Accept or reject the provided state (The verification party makes this decision). </p>
+</li>
+</ol>
+<h3 id="verification-of-circuits-public-signals">Verification of Circuit's Public Signals</h3>
+<p>This verification includes the following:
+1. Check if the issuer states of the provided claim proofs are published on the blockchain (same as for identity state).
+2. Check the query signals so that the claim schema and the specific values can be verified.</p>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+    <nav class="md-footer__inner md-grid" aria-label="Footer" >
+      
+        
+        <a href="../../getting-started/state-transition/on-chain-state-transition/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Verify the Proof On-Chain" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Verify the Proof On-Chain
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../querylanguage/" class="md-footer__link md-footer__link--next" aria-label="Next: Proof Query language" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Proof Query language
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+      
+      
+    
+    <a href="https://t.me/iden3io" target="_blank" rel="noopener" title="t.me" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M248 8C111.033 8 0 119.033 0 256s111.033 248 248 248 248-111.033 248-248S384.967 8 248 8Zm114.952 168.66c-3.732 39.215-19.881 134.378-28.1 178.3-3.476 18.584-10.322 24.816-16.948 25.425-14.4 1.326-25.338-9.517-39.287-18.661-21.827-14.308-34.158-23.215-55.346-37.177-24.485-16.135-8.612-25 5.342-39.5 3.652-3.793 67.107-61.51 68.335-66.746.153-.655.3-3.1-1.154-4.384s-3.59-.849-5.135-.5q-3.283.746-104.608 69.142-14.845 10.194-26.894 9.934c-8.855-.191-25.888-5.006-38.551-9.123-15.531-5.048-27.875-7.717-26.8-16.291q.84-6.7 18.45-13.7 108.446-47.248 144.628-62.3c68.872-28.647 83.183-33.623 92.511-33.789 2.052-.034 6.639.474 9.61 2.885a10.452 10.452 0 0 1 3.53 6.716 43.765 43.765 0 0 1 .417 9.769Z"/></svg>
+    </a>
+  
+    
+    
+      
+      
+    
+    <a href="https://github.com/iden3/docs" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+    
+    
+      
+      
+    
+    <a href="https://iden3.io/" target="_blank" rel="noopener" title="iden3.io" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M0 3.75C0 2.784.784 2 1.75 2h20.5c.966 0 1.75.784 1.75 1.75v16.5A1.75 1.75 0 0 1 22.25 22H1.75A1.75 1.75 0 0 1 0 20.25V3.75zm1.75-.25a.25.25 0 0 0-.25.25V5.5h4v-2H1.75zM7 3.5v2h4v-2H7zm5.5 0v2h10V3.75a.25.25 0 0 0-.25-.25H12.5zm10 3.5h-21v13.25c0 .138.112.25.25.25h20.5a.25.25 0 0 0 .25-.25V7z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.tracking"], "search": "../../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.5a2dcb6a.min.js"></script>
+      
+        <script src="../../javascripts/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+    
+  </body>
+</html>
